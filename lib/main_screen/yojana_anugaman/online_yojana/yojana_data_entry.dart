@@ -108,8 +108,8 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
     NepaliDateTime? _selectedDateTime = await showAdaptiveDatePicker(
       context: context,
       initialDate: selectedDate ?? NepaliDateTime.now(),
-      firstDate: (NepaliDateTime.now()).subtract(Duration(days: 30)),
-      lastDate: NepaliDateTime.now(),
+      firstDate: NepaliDateTime(2079, 1, 1),
+      lastDate: NepaliDateTime(2080, 06, 22),
       dateOrder: DateOrder.dmy,
       language: NepaliUtils().language,
       initialDatePickerMode: DatePickerMode.day,
@@ -249,10 +249,6 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
       whatYouSawList.add(text3 + " " + selectedRadioOptions3 );
       whatYouSawList.add(text4 + " " + selectedRadioOptions4 );
       whatYouSawList.add(text5 + " " + selectedRadioOptions5);
-      if (bool6) {
-        whatYouSawList.add(text6);
-      }
-      ;
     });
     List<UserAssigned> userAssigned = [];
     userAssigned.add(UserAssigned(
@@ -513,9 +509,6 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 16,
-                    ),
                   ],
                 ),
               ),
@@ -561,9 +554,6 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                           ),
                   ),
                 ],
-              ),
-              SizedBox(
-                height: 16,
               ),
               Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -749,30 +739,16 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CheckboxListTile(
-                          title: Text(text6),
-                          value: bool6,
-                          onChanged: (value) {
-                            setState(() {
-                              bool6 = value ?? false;
-                            });
-                          },
-                        ),
-                      ),
                     ],
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: 16,
-                    ),
                     TextField(
                       keyboardType: TextInputType.multiline,
                       maxLines: 3,
@@ -794,19 +770,18 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                       controller: description,
                     ),
                     const SizedBox(
-                      height: 16,
+                      height: 0,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 8, 20, 8),
-                      child: CheckboxListTile(
-                        title: Text('निर्माणकर्ता/सेवा प्रदायकको प्रतिनिधिः'),
-                        value: constructorRepresentative,
-                        onChanged: (value) {
-                          setState(() {
-                            constructorRepresentative = value ?? false;
-                          });
-                        },
-                      ),
+                    CheckboxListTile(
+                      title: Text('निर्माणकर्ता/सेवा प्रदायकको प्रतिनिधिः'),
+
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                      value: constructorRepresentative,
+                      onChanged: (value) {
+                        setState(() {
+                          constructorRepresentative = value ?? false;
+                        });
+                      },
                     ),
                     Visibility(
                       visible: constructorRepresentative,
@@ -819,7 +794,7 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                                 ),
                                 floatingLabelStyle: const TextStyle(
                                     fontSize: 20, color: Colors.black),
-                                labelText: 'ननिर्माणकर्ताको प्रतिनिधिको नाम'),
+                                labelText: 'निर्माणकर्ताको प्रतिनिधिको नाम'),
                             controller: consRepresentetiveName,
                           ),
                           const SizedBox(
@@ -839,17 +814,15 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 8, 20, 8),
-                      child: CheckboxListTile(
-                        title: Text('उपभोक्ता समितिको प्रतिनिधिः'),
-                        value: consumerRepresentative,
-                        onChanged: (value) {
-                          setState(() {
-                            consumerRepresentative = value ?? false;
-                          });
-                        },
-                      ),
+                    CheckboxListTile(
+                      title: Text('उपभोक्ता समितिको प्रतिनिधिः'),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                      value: consumerRepresentative,
+                      onChanged: (value) {
+                        setState(() {
+                          consumerRepresentative = value ?? false;
+                        });
+                      },
                     ),
                     Visibility(
                       visible: consumerRepresentative,
@@ -882,9 +855,6 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 16,
-                    ),
                     TextFormField(
                       keyboardType: TextInputType.multiline,
                       maxLines: 3,
@@ -907,7 +877,7 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                 ),
               ),
               const SizedBox(
-                height: 16,
+                height: 6,
               ),
               Container(
                 child: yojanaImage2 == null
@@ -916,7 +886,7 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                             onPressed: () {
                               getImageYojana2();
                             },
-                            child: const Text("add additional images")))
+                            child: const Text("तस्बिर थप गर्नुहोस्")))
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -980,7 +950,7 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                       ),
               ),
               const SizedBox(
-                height: 16,
+                height: 6,
               ),
               ElevatedButton(
                   onPressed: () {
@@ -1008,14 +978,14 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                         child: Column(
                           children: [
                             const SizedBox(
-                              height: 16,
+                              height: 8,
                             ),
                             const Text("अनुगमनको लागि कर्मचारी छान्नुहोस्"),
                             const SizedBox(
-                              height: 16,
+                              height: 8,
                             ),
                             SizedBox(
-                              height: widget.addMemberList.length * 60,
+                              height: widget.addMemberList.length * 50,
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 itemCount: widget.addMemberList.length,

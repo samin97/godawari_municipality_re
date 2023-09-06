@@ -274,7 +274,7 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
                     return Column(
                       children: [
 
-                        const Text("Report List: "),
+                        const Text("अनुगमनमा सहभागी कर्मचारीहरूको विवरणः: "),
                         SizedBox(
                           height: 10,
                         ),
@@ -283,6 +283,13 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: yojanaList.anuagaman?.length ?? 0,
                             itemBuilder: (context, index) {
+
+                              return Card(
+                                  child: YojanaReportDetails(
+                                    id: yojanaList.anuagaman![index].id!.toInt(),
+                                    name : widget.yojanaModel.activityName.toString(),
+                                  )
+                              );
                               return InkWell(
                                 child: Card(
                                   child: Padding(
