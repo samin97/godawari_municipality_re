@@ -55,8 +55,9 @@ class _PublicEventDetailsState extends State<PublicEventDetails> {
                   ),
                 ),
                 const SizedBox(height: 10),
+
                 Text(
-                  "Event : " + widget.eventModel.name.toString(),
+                  "कृयाकलापको नाम: " + widget.eventModel.name.toString(),
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.black,
@@ -64,7 +65,7 @@ class _PublicEventDetailsState extends State<PublicEventDetails> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "Start date : " + widget.eventModel.startDate.toString(),
+                  "कृयाकलाप संचालन हुने मिति: " + widget.eventModel.startDate.toString(),
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.black,
@@ -72,7 +73,7 @@ class _PublicEventDetailsState extends State<PublicEventDetails> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "End date : " + widget.eventModel.endDate.toString(),
+                  "समापन हुने मिति: " + widget.eventModel.endDate.toString(),
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.black,
@@ -80,7 +81,7 @@ class _PublicEventDetailsState extends State<PublicEventDetails> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "Description : " +
+                  "कृयाकलापको विवरण: " +
                       widget.eventModel.longDescription.toString(),
                   style: const TextStyle(
                     fontSize: 18,

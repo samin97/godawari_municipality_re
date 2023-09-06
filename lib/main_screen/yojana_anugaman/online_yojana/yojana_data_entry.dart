@@ -108,8 +108,8 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
     NepaliDateTime? _selectedDateTime = await showAdaptiveDatePicker(
       context: context,
       initialDate: selectedDate ?? NepaliDateTime.now(),
-      firstDate: NepaliDateTime(2079, 1, 1),
-      lastDate: NepaliDateTime(2099, 12, 12),
+      firstDate: (NepaliDateTime.now()).subtract(Duration(days: 30)),
+      lastDate: NepaliDateTime.now(),
       dateOrder: DateOrder.dmy,
       language: NepaliUtils().language,
       initialDatePickerMode: DatePickerMode.day,

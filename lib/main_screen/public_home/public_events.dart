@@ -102,11 +102,11 @@ class _PublicEventsState extends State<PublicEvents> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Title : " +
+                                Text("कृयाकलापको नाम: " +
                                     eventList[index].name.toString()),
-                                Text("Date : " +
+                                Text("कृयाकलाप संचालन हुने मिति: " +
                                     eventList[index].startDate.toString()),
-                                Text("Details : " +
+                                Text("कृयाकलापको विवरण: " +
                                     eventList[index]
                                         .shortDescription
                                         .toString()),
