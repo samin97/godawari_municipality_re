@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_attendance/main_screen/yojana_anugaman/yojana_report/pending_report.dart';
-import 'package:smart_attendance/main_screen/yojana_anugaman/yojana_report/yojana_report_card.dart';
-import 'package:smart_attendance/main_screen/yojana_anugaman/yojana_report/yojana_report_details.dart';
 import 'package:smart_attendance/main_screen/yojana_anugaman/yojana_report/your_report.dart';
 
-import '../../../global/provider/fetch_yojana.dart';
-import '../../../models/yojana_report_model.dart';
 import '../online_yojana/yojana_options.dart';
 
 class YojanaReportList extends StatefulWidget {

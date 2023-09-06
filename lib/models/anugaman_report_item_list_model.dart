@@ -1,19 +1,46 @@
-// To parse this JSON data, do
-//
-//     final yojanaReportModel = yojanaReportModelFromJson(jsonString);
-
 import 'dart:convert';
 
-YojanaReportModel yojanaReportModelFromJson(String str) => YojanaReportModel.fromJson(json.decode(str));
+AnugamanReportItemListModel anugamanReportItemListFromJson(String str) => AnugamanReportItemListModel.fromJson(json.decode(str));
 
-String yojanaReportModelToJson(YojanaReportModel data) => json.encode(data.toJson());
+String anugamanReportItemListToJson(AnugamanReportItemListModel data) => json.encode(data.toJson());
 
-class YojanaReportModel {
+class AnugamanReportItemListModel {
+  String? fiscalYear;
+  String? endDate;
+  String? samjautaDate;
+  String? upaBhoktaSamitiName;
+  List<Anuagaman>? anuagaman;
+
+  AnugamanReportItemListModel({
+    this.fiscalYear,
+    this.endDate,
+    this.samjautaDate,
+    this.upaBhoktaSamitiName,
+    this.anuagaman,
+  });
+
+  factory AnugamanReportItemListModel.fromJson(Map<String, dynamic> json) => AnugamanReportItemListModel(
+    fiscalYear: json["fiscalYear"],
+    endDate: json["endDate"],
+    samjautaDate: json["samjautaDate"],
+    upaBhoktaSamitiName: json["upaBhoktaSamitiName"],
+    anuagaman: List<Anuagaman>.from(json["anuagaman"].map((x) => Anuagaman.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "fiscalYear": fiscalYear,
+    "endDate": endDate,
+    "samjautaDate": samjautaDate,
+    "upaBhoktaSamitiName": upaBhoktaSamitiName,
+    "anuagaman": List<dynamic>.from(anuagaman!.map((x) => x.toJson())),
+  };
+}
+
+class Anuagaman {
   int? id;
   int? budgetId;
   String? monitoringDateNep;
-  String? monitoringTime;
-  String? whatYouSawList;
+  List<String>? whatYouSawList;
   String? whatYouSaw;
   String? yourFeedBack;
   String? responseOfPreviousFeedback;
@@ -37,13 +64,12 @@ class YojanaReportModel {
   String? longitude;
   bool? isGroup;
   String? activityName;
-  String? userAssigneds;
+  List<UserAssigned>? userAssigneds;
 
-  YojanaReportModel({
+  Anuagaman({
     this.id,
     this.budgetId,
     this.monitoringDateNep,
-    this.monitoringTime,
     this.whatYouSawList,
     this.whatYouSaw,
     this.yourFeedBack,
@@ -71,12 +97,11 @@ class YojanaReportModel {
     this.userAssigneds,
   });
 
-  factory YojanaReportModel.fromJson(Map<String, dynamic> json) => YojanaReportModel(
+  factory Anuagaman.fromJson(Map<String, dynamic> json) => Anuagaman(
     id: json["id"],
     budgetId: json["budgetId"],
     monitoringDateNep: json["monitoringDateNep"],
-    monitoringTime: json["monitoringTime"],
-    whatYouSawList: json["whatYouSawList"],
+    whatYouSawList: List<String>.from(json["whatYouSawList"].map((x) => x)),
     whatYouSaw: json["whatYouSaw"],
     yourFeedBack: json["yourFeedBack"],
     responseOfPreviousFeedback: json["responseOfPreviousFeedback"],
@@ -100,15 +125,14 @@ class YojanaReportModel {
     longitude: json["longitude"],
     isGroup: json["isGroup"],
     activityName: json["activityName"],
-    userAssigneds: json["userAssigneds"],
+    userAssigneds: List<UserAssigned>.from(json["userAssigneds"].map((x) => UserAssigned.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "budgetId": budgetId,
     "monitoringDateNep": monitoringDateNep,
-    "monitoringTime": monitoringTime,
-    "whatYouSawList": whatYouSawList,
+    "whatYouSawList": List<dynamic>.from(whatYouSawList!.map((x) => x)),
     "whatYouSaw": whatYouSaw,
     "yourFeedBack": yourFeedBack,
     "responseOfPreviousFeedback": responseOfPreviousFeedback,
@@ -132,6 +156,30 @@ class YojanaReportModel {
     "longitude": longitude,
     "isGroup": isGroup,
     "activityName": activityName,
-    "userAssigneds": userAssigneds,
+    "userAssigneds": List<dynamic>.from(userAssigneds!.map((x) => x.toJson())),
+  };
+}
+
+class UserAssigned {
+  bool? isAssigned;
+  String? name;
+  String? pad;
+
+  UserAssigned({
+    this.isAssigned,
+    this.name,
+    this.pad,
+  });
+
+  factory UserAssigned.fromJson(Map<String, dynamic> json) => UserAssigned(
+    isAssigned: json["isAssigned"],
+    name: json["name"],
+    pad: json["pad"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "isAssigned": isAssigned,
+    "name": name,
+    "pad": pad,
   };
 }

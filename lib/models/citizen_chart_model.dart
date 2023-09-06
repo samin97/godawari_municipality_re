@@ -7,7 +7,8 @@ import 'dart:convert';
 CitizenChartModel citizenChartModelFromJson(String str) =>
     CitizenChartModel.fromJson(json.decode(str));
 
-String citizenChartModelToJson(CitizenChartModel data) => json.encode(data.toJson());
+String citizenChartModelToJson(CitizenChartModel data) =>
+    json.encode(data.toJson());
 
 class CitizenChartModel {
   String? sakhaName;
@@ -20,32 +21,37 @@ class CitizenChartModel {
   String? remarks;
   String? awasekKagajat;
   String? userCreated;
+  String? images;
+  String? audioFile;
 
-  CitizenChartModel({
-    this.sakhaName,
-    this.sewaCategory,
-    this.sewaKisim,
-    this.sewaSulkhaRs,
-    this.lagneSamaya,
-    this.jimbebarAdhakari,
-    this.gunashoKoAdhakari,
-    this.remarks,
-    this.awasekKagajat,
-    this.userCreated,
-  });
+  CitizenChartModel(
+      {this.sakhaName,
+      this.sewaCategory,
+      this.sewaKisim,
+      this.sewaSulkhaRs,
+      this.lagneSamaya,
+      this.jimbebarAdhakari,
+      this.gunashoKoAdhakari,
+      this.remarks,
+      this.awasekKagajat,
+      this.userCreated,
+      this.images,
+      this.audioFile});
 
-  factory CitizenChartModel.fromJson(Map<String, dynamic> json) => CitizenChartModel(
-        sakhaName: json["sakhaName"],
-        sewaCategory: json["sewaCategory"],
-        sewaKisim: json["sewaKisim"],
-        sewaSulkhaRs: json["sewaSulkhaRs"],
-        lagneSamaya: json["lagneSamaya"],
-        jimbebarAdhakari: json["jimbebarAdhakari"],
-        gunashoKoAdhakari: json["gunashoKoAdhakari"],
-        remarks: json["remarks"],
-        awasekKagajat: json["awasekKagajat"],
-        userCreated: json["userCreated"],
-      );
+  factory CitizenChartModel.fromJson(Map<String, dynamic> json) =>
+      CitizenChartModel(
+          sakhaName: json["sakhaName"],
+          sewaCategory: json["sewaCategory"],
+          sewaKisim: json["sewaKisim"],
+          sewaSulkhaRs: json["sewaSulkhaRs"],
+          lagneSamaya: json["lagneSamaya"],
+          jimbebarAdhakari: json["jimbebarAdhakari"],
+          gunashoKoAdhakari: json["gunashoKoAdhakari"],
+          remarks: json["remarks"],
+          awasekKagajat: json["awasekKagajat"],
+          userCreated: json["userCreated"],
+          images: json["images"],
+          audioFile: json["audioFile"]);
 
   Map<String, dynamic> toJson() => {
         "sakhaName": sakhaName,
@@ -58,5 +64,7 @@ class CitizenChartModel {
         "remarks": remarks,
         "awasekKagajat": awasekKagajat,
         "userCreated": userCreated,
+        "images": images,
+        "audioFile": audioFile,
       };
 }

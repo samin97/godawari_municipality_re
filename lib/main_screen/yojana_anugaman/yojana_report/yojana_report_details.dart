@@ -9,8 +9,10 @@ import '../../../models/yojana_report_model.dart';
 
 class YojanaReportDetails extends StatefulWidget {
   final int id;
+  final String name;
 
-  const YojanaReportDetails({Key? key, required this.id}) : super(key: key);
+  const YojanaReportDetails({Key? key, required this.id, required this.name})
+      : super(key: key);
 
   @override
   State<YojanaReportDetails> createState() => _YojanaReportDetailsState();
@@ -19,7 +21,6 @@ class YojanaReportDetails extends StatefulWidget {
 class _YojanaReportDetailsState extends State<YojanaReportDetails> {
   @override
   void initState() {
-    print("image");
     super.initState();
   }
 
@@ -37,9 +38,10 @@ class _YojanaReportDetailsState extends State<YojanaReportDetails> {
     );
 
     if (response.statusCode == 200) {
+      print(response.body);
       YojanaReportModel _yojanaReportModel =
           YojanaReportModel.fromJson(jsonDecode(response.body));
-
+      print(_yojanaReportModel);
       return _yojanaReportModel;
     } else {
       throw Exception('Failed to load attendance log');
@@ -85,94 +87,81 @@ class _YojanaReportDetailsState extends State<YojanaReportDetails> {
                     child: CircularProgressIndicator(),
                   );
                 }
+                print(snapshot.hasData);
                 if (snapshot.hasData) {
                   YojanaReportModel yojanaReportDetails = snapshot.data;
-                  print(yojanaReportDetails.image1);
 
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 20.0,top: 30),
+                        padding: const EdgeInsets.only(left: 20.0, top: 30),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "तपाइ ${yojanaReportDetails.budgetId} अनुगमन गर्दै हुनुहुन्छ",
+                              "तपाइ ${widget.name ?? "???"} अनुगमन गर्दै हुनुहुन्छ",
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(
                               height: 16,
                             ),
                             Text(
-                              "Date :${yojanaReportDetails.monitoringDateNep}",
+                              "Date :${yojanaReportDetails.monitoringDateNep ?? ""}",
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(
                               height: 16,
                             ),
                             Text(
-                              "योजना अनुगमनको प्रकार:${yojanaReportDetails.progressStatus}",
+                              "योजना अनुगमनको प्रकार:${yojanaReportDetails.progressStatus ?? ""}",
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(
                               height: 16,
                             ),
                             Text(
-                              "गुणस्तरः :${yojanaReportDetails.quality}",
+                              "अनुगमनको क्रममा देखिएका कुराहरु:",
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            Text(
+                              "${yojanaReportDetails.whatYouSaw ?? ""}",
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(
                               height: 16,
                             ),
                             Text(
-                              "अनुगमनमा देख्नुभएको अवस्थाको विवरण :",
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            Text(
-                              "${yojanaReportDetails.whatYouSaw}",
+                              "ननिर्माणकर्ताको प्रतिनिधिको नाम:${yojanaReportDetails.consRepresentetiveName ?? ""}",
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(
                               height: 16,
                             ),
                             Text(
-                              "थप विवरण :${yojanaReportDetails.additionalNote}",
+                              "निर्माणकर्ताको प्रतिनिधिको फोन नं. :${yojanaReportDetails.consRepresentetivePhone ?? ""}",
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(
                               height: 16,
                             ),
                             Text(
-                              "परामर्शदाताको प्रतिनिधि :${yojanaReportDetails.consultantReprisintive}",
+                              "उपभोक्ता समितिको प्रतिनिधिको नाम:${yojanaReportDetails.consumerRepresentetiveName ?? ""}",
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(
                               height: 16,
                             ),
                             Text(
-                              "परामर्शदाताको प्रतिनिधिको फोन नं.:${yojanaReportDetails.reprisintivePhone ?? ""}",
+                              "उपभोक्ता समितिको प्रतिनिधिको फोन नं.:${yojanaReportDetails.consumerRepresentetivePhone ?? ""}",
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(
                               height: 16,
                             ),
                             Text(
-                              "गुणस्तरमाथिको तपाइको कैफियत :${yojanaReportDetails.remarksOnQuality}",
+                              "कैफियत :${yojanaReportDetails.overAllRemarks ?? ""}",
                               style: const TextStyle(fontSize: 16),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Text(
-                              "कैफियत :${yojanaReportDetails.overAllRemarks}",
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            const SizedBox(
-                              height: 16,
                             ),
                           ],
                         ),
@@ -181,7 +170,7 @@ class _YojanaReportDetailsState extends State<YojanaReportDetails> {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Column(
                                 children: [
                                   if (yojanaReportDetails.image1 !=
@@ -250,7 +239,8 @@ class _YojanaReportDetailsState extends State<YojanaReportDetails> {
                   );
                 } else {
                   return const Center(
-                    child: Text("There is no yojana assigned to you yet"),
+                    heightFactor: 40,
+                    child: Text("There is no details regarding this report"),
                   );
                 }
               },

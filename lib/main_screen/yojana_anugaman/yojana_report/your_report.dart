@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:smart_attendance/main_screen/yojana_anugaman/yojana_report/selected_yojana_report_list.dart';
-import 'package:smart_attendance/main_screen/yojana_anugaman/yojana_report/yojana_report_card.dart';
+import 'package:smart_attendance/main_screen/yojana_anugaman/yojana_report/yojana_report_category_list.dart';
 import 'package:smart_attendance/main_screen/yojana_anugaman/yojana_report/yojana_report_details.dart';
 
 import '../../../global/provider/fetch_yojana.dart';
 import '../../../models/yojana_details_model.dart';
-import '../../../models/yojana_report_model.dart';
 import '../online_yojana/yojana_card.dart';
 class YourReports extends StatefulWidget {
   const YourReports({Key? key}) : super(key: key);
@@ -44,7 +42,7 @@ class _YourReportsState extends State<YourReports> {
                       return InkWell(
                           onTap: () {
                             Route newRoute = MaterialPageRoute(
-                                builder: (_) => SelectedYojanaReportList(
+                                builder: (_) => YojanaReportCategoryList(
                                   yojanaModel: yojanaList[index],
                                 ));
                             Navigator.pushReplacement(context, newRoute);

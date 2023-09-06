@@ -61,7 +61,7 @@ class _CitizenChartState extends State<CitizenChart> {
     );
     if (response.statusCode == 200) {
       List<dynamic> parsed =
-          json.decode(response.body).cast<Map<String, dynamic>>();
+      json.decode(response.body).cast<Map<String, dynamic>>();
 
       List<CitizenChartModel> list = [];
 
@@ -84,7 +84,10 @@ class _CitizenChartState extends State<CitizenChart> {
       List<String> items = [];
       var jsonData = json.decode(response.body) as List;
       for (var element in jsonData) {
-        items.add(element["sakhaName"]);
+        if(!items.contains(element["sakhaName"])){
+          items.add(element["sakhaName"]);
+        }
+
       }
       return items;
     } else {
@@ -95,9 +98,9 @@ class _CitizenChartState extends State<CitizenChart> {
 
 
   DropdownMenuItem<String> buildMenuItems(String leaveFor) => DropdownMenuItem(
-        value: leaveFor,
-        child: Text(leaveFor),
-      );
+    value: leaveFor,
+    child: Text(leaveFor),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -234,8 +237,8 @@ class _CitizenChartState extends State<CitizenChart> {
                             onTap: () {
                               Route newRoute = MaterialPageRoute(
                                   builder: (_) => CitizenChartDetails(
-                                        model: chartList[index],
-                                      ));
+                                    model: chartList[index],
+                                  ));
                               Navigator.pushReplacement(context, newRoute);
                             },
                           ),

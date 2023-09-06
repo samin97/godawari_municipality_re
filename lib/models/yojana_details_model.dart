@@ -21,6 +21,8 @@ class YojanaModel {
   String? samjotaName;
   String? phone;
 
+
+
   YojanaModel(
       {required this.id,
       this.activityName,
