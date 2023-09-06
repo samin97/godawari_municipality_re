@@ -37,6 +37,7 @@ class _YojanaReportDetailsState extends State<YojanaReportDetails> {
       },
     );
 
+    print(widget.id);
     if (response.statusCode == 200) {
       print(response.body);
       YojanaReportModel _yojanaReportModel =

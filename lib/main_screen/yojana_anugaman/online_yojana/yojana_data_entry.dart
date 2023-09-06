@@ -40,7 +40,6 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
   @override
   void initState() {
     handleLocationPermission();
-    getCurrenntLocation();
     super.initState();
   }
 
@@ -121,6 +120,7 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
       final String nepaliFormatted = nepaliDate.format(_selectedDateTime);
       yojanaDate = nepaliFormatted;
       selectedDate = _selectedDateTime;
+      getCurrenntLocation();
     });
   }
 
@@ -507,6 +507,7 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                           onChanged: (value) => setState(
                             () {
                               yojanaTypeSelected = value as String?;
+
                             },
                           ),
                         ),

@@ -1,6 +1,3 @@
-// To parse this JSON data, do
-//
-//     final yojanaReportModel = yojanaReportModelFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -25,17 +22,17 @@ class YojanaReportModel {
   String? quality;
   String? remarksOnQuality;
   String? additionalNote;
-  String? constructorRepresentative;
+  bool constructorRepresentative;
   String? consRepresentetiveName;
   String? consRepresentetivePhone;
-  String? consumerRepresentative;
+  bool consumerRepresentative;
   String? consumerRepresentetiveName;
   String? consumerRepresentetivePhone;
   String? phone;
   String? overAllRemarks;
   String? latitude;
   String? longitude;
-  bool? isGroup;
+  bool isGroup;
   String? activityName;
   String? userAssigneds;
 
@@ -56,17 +53,17 @@ class YojanaReportModel {
     this.quality,
     this.remarksOnQuality,
     this.additionalNote,
-    this.constructorRepresentative,
+    required this.constructorRepresentative,
     this.consRepresentetiveName,
     this.consRepresentetivePhone,
-    this.consumerRepresentative,
+    required this.consumerRepresentative,
     this.consumerRepresentetiveName,
     this.consumerRepresentetivePhone,
     this.phone,
     this.overAllRemarks,
     this.latitude,
     this.longitude,
-    this.isGroup,
+    required this.isGroup,
     this.activityName,
     this.userAssigneds,
   });

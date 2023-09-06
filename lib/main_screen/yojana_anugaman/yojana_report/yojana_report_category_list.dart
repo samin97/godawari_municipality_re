@@ -56,6 +56,7 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
         'Authorization': 'Bearer $token',
       },
     );
+    print(response.body);
 
     if (response.statusCode == 200) {
       List<dynamic> parsed =
@@ -64,6 +65,7 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
       List<AnugamanReportCategoryModel> list = parsed
           .map((json) => AnugamanReportCategoryModel.fromJson(json))
           .toList();
+      print(list);
 
       return list;
     } else {
