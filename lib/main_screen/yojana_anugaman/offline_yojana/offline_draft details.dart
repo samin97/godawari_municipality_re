@@ -44,15 +44,8 @@ class _OfflineDraftDetailsState extends State<OfflineDraftDetails> {
   void initState() {
     setState(() {
       progress.text = widget.draftModel.yojanaTypeSelected;
-      yojanaID = widget.draftModel.yojanaId;
-      yojanaDate = widget.draftModel.yojanaDate;
       description.text = widget.draftModel.description;
       description2.text = widget.draftModel.description2;
-      previousSuggestion.text = widget.draftModel.previousSuggestion;
-      counselorRepresentative.text = widget.draftModel.counselorRepresentative;
-      counselorRepresentativePhone.text =
-          widget.draftModel.counselorRepresentativePhone;
-      condition.text = widget.draftModel.condition;
       latitude = widget.draftModel.latitude;
       longitude = widget.draftModel.longitude;
       base64image1 = widget.draftModel.image1;
@@ -168,10 +161,7 @@ class _OfflineDraftDetailsState extends State<OfflineDraftDetails> {
                     const SizedBox(
                       height: 16,
                     ),
-                    Text(
-                      "Date :${widget.draftModel.yojanaDate}",
-                      style: const TextStyle(fontSize: 20),
-                    ),
+
                     const SizedBox(
                       height: 16,
                     ),
@@ -373,19 +363,7 @@ class _OfflineDraftDetailsState extends State<OfflineDraftDetails> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           widget.service.saveYojanaDraft(YojanaDraft()
-                            ..activityName = widget.draftModel.activityName!
-                            ..yojanaDate = yojanaDate!
-                            ..yojanaId = widget.draftModel.yojanaId
-                            ..yojanaTypeSelected = yojanaTypeSelected.toString()
-                            ..description = description.text
-                            ..previousSuggestion = previousSuggestion.text
-                            ..description2 = description2.text
-                            ..counselorRepresentative =
-                                counselorRepresentative.text
-                            ..counselorRepresentativePhone =
-                                counselorRepresentativePhone.text
-                            ..condition = condition.text
-                            ..longitude = longitude!
+
                             ..latitude = latitude!
                             ..image1 = base64image1
                             ..image2 = base64image2

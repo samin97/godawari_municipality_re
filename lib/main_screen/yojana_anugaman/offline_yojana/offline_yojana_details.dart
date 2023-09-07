@@ -489,17 +489,10 @@ class _OfflineYojanaDetailState extends State<OfflineYojanaDetail> {
                       onPressed: () async {if (_formKey.currentState!.validate()) {
                         service.saveYojanaDraft(YojanaDraft()
                           ..activityName = widget.yojanaModel.activityName!
-                          ..yojanaDate = yojanaDate!
-                          ..yojanaId = widget.yojanaModel.id
+
                           ..yojanaTypeSelected = yojanaTypeSelected.toString()
                           ..description = description.text
-                          ..previousSuggestion = previousSuggestion.text
                           ..description2 = description2.text
-                          ..counselorRepresentative =
-                              counselorRepresentative.text
-                          ..counselorRepresentativePhone =
-                              counselorRepresentativePhone.text
-                          ..condition = condition.text
                           ..longitude = longitude!
                           ..latitude = latitude!
                           ..image1 = base64image1

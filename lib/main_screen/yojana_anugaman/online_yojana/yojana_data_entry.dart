@@ -81,19 +81,16 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
   String? latitude;
   String? longitude;
   String? yojanaTypeSelected;
-  String? qualitySelected;
 
   String yojanaDate = "Date";
   TextEditingController description = TextEditingController();
   TextEditingController description2 = TextEditingController();
-  TextEditingController previousSuggestion = TextEditingController();
-  TextEditingController qualityComment = TextEditingController();
   TextEditingController consRepresentetiveName = TextEditingController();
   TextEditingController consRepresentetivePhone = TextEditingController();
   TextEditingController consumerRepresentetiveName = TextEditingController();
   TextEditingController consumerRepresentetivePhone = TextEditingController();
 
-  TextEditingController condition = TextEditingController();
+  TextEditingController discrepotion2 = TextEditingController();
   bool? selectedMembers = false;
 
   String getStartDateText() {
@@ -108,8 +105,8 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
     NepaliDateTime? _selectedDateTime = await showAdaptiveDatePicker(
       context: context,
       initialDate: selectedDate ?? NepaliDateTime.now(),
-      firstDate: NepaliDateTime(2079, 1, 1),
-      lastDate: NepaliDateTime(2080, 06, 22),
+      firstDate: (NepaliDateTime.now()).subtract(Duration(days: 7)),
+      lastDate: NepaliDateTime.now(),
       dateOrder: DateOrder.dmy,
       language: NepaliUtils().language,
       initialDatePickerMode: DatePickerMode.day,
@@ -176,40 +173,6 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
     }
   }
 
-  validate() {
-    if ((leaveEndDate != null) && (selectedDate != null)) {
-      print(yojanaTypeSelected);
-      if (yojanaTypeSelected != null) {
-        if (yojanaImage1 != null) {
-          //todo uploadImage();
-        } else {
-          showDialog(
-              context: this.context,
-              builder: (c) {
-                return const ErrorDialog(
-                  message: "अनुरोध पत्र समाबेश गर्नुहोला । ",
-                );
-              });
-        }
-      } else {
-        showDialog(
-            context: this.context,
-            builder: (c) {
-              return const ErrorDialog(
-                message: "छुट्टीको कारण छान्नुहोस् ।",
-              );
-            });
-      }
-    } else {
-      showDialog(
-          context: this.context,
-          builder: (c) {
-            return const ErrorDialog(
-              message: " कृपाय छुट्टी सुरू तथा समाप्त हुने मिति छान्नुहोला ",
-            );
-          });
-    }
-  }
 
   Future<bool> _onWillPop() async {
     return false;
@@ -221,19 +184,17 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
   PostAnugamanModel? anugamanModel;
 
   List<String> whatYouSawList = [];
-  String text1 = "स्वीकृत लागत अनुमान वमोजिम ";
-  String text2 = "सार्वजनिक परीक्षण ";
-  String text3 = "जनसहभागिता ";
-  String text4 = "आयोजना स्थलमा सूचना पाटी सबैले देख्ने ठाउमा ";
-  String text5 = "लग बुक ";
-  String text6 = "अन्य";
+  String text1 = "स्वीकृत लागत अनुमान वमोजिम";
+  String text2 = "सार्वजनिक परीक्षण";
+  String text3 = "जनसहभागिता";
+  String text4 = "आयोजना स्थलमा सूचना पाटी सबैले देख्ने ठाउमा";
+  String text5 = "लग बुक";
 
   String selectedRadioOptions1 = radioOptions[0];
   String selectedRadioOptions2 = radioOptions[0];
   String selectedRadioOptions3 = radioOptions[0];
   String selectedRadioOptions4 = radioOptions2[0];
   String selectedRadioOptions5 = radioOptions2[0];
-  String selectedRadioOptions6 = radioOptions[0];
 
   String radioOptionSelected = radioOptions[0];
 
@@ -244,10 +205,10 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
 
   Future postNow() async {
     setState(() {
-      whatYouSawList.add(text1 + " " + selectedRadioOptions1 );
-      whatYouSawList.add(text2 + " " + selectedRadioOptions2 );
-      whatYouSawList.add(text3 + " " + selectedRadioOptions3 );
-      whatYouSawList.add(text4 + " " + selectedRadioOptions4 );
+      whatYouSawList.add(text1 + " " + selectedRadioOptions1);
+      whatYouSawList.add(text2 + " " + selectedRadioOptions2);
+      whatYouSawList.add(text3 + " " + selectedRadioOptions3);
+      whatYouSawList.add(text4 + " " + selectedRadioOptions4);
       whatYouSawList.add(text5 + " " + selectedRadioOptions5);
     });
     List<UserAssigned> userAssigned = [];
@@ -272,10 +233,7 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
       monitoringDateNep: yojanaDate,
       whatYouSaw: description.text,
       whatYouSawList: whatYouSawList,
-      responseOfPreviousFeedback: previousSuggestion.text,
       progressStatus: yojanaTypeSelected,
-      quality: qualitySelected,
-      remarksOnQuality: qualityComment.text,
       additionalNote: description2.text,
       consRepresentetiveName: consRepresentetiveName.text,
       consRepresentetivePhone: consRepresentetivePhone.text,
@@ -283,7 +241,7 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
       consumerRepresentative: consumerRepresentative,
       consumerRepresentetiveName: consumerRepresentetiveName.text,
       consumerRepresentetivePhone: consumerRepresentetivePhone.text,
-      overAllRemarks: condition.text,
+      overAllRemarks: discrepotion2.text,
       image1: base64image1,
       image2: base64image2,
       image3: base64image3,
@@ -399,18 +357,19 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
     } else {
       showDialog<String>(
         context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text("तपाईं अफलाइन हुनुहुन्छ ।"),
-          content: const Text(
-              "तपाईंको मोबार्इल सेटमा इन्टरनेट जडान भए/नभएको सुनिश्चित गर्नुहोस् ।"),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text("Conform"))
-          ],
-        ),
+        builder: (BuildContext context) =>
+            AlertDialog(
+              title: const Text("तपाईं अफलाइन हुनुहुन्छ ।"),
+              content: const Text(
+                  "तपाईंको मोबार्इल सेटमा इन्टरनेट जडान भए/नभएको सुनिश्चित गर्नुहोस् ।"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Conform"))
+              ],
+            ),
       );
       //localStorage();
     }
@@ -454,24 +413,24 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                   children: [
                     RichText(
                         text: TextSpan(children: [
-                      TextSpan(
-                        text: 'तपाइ ',
-                        style:
+                          TextSpan(
+                            text: 'तपाइ ',
+                            style:
                             const TextStyle(fontSize: 18, color: Colors.black),
-                      ),
-                      TextSpan(
-                        text: widget.yojanaModel.activityName,
-                        style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                      ),
-                      TextSpan(
-                        text: ' अनुगमन तथा सुपरिवेक्षण गर्दैहुनुहुन्छ',
-                        style:
+                          ),
+                          TextSpan(
+                            text: widget.yojanaModel.activityName,
+                            style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                          TextSpan(
+                            text: ' अनुगमन तथा सुपरिवेक्षण गर्दैहुनुहुन्छ',
+                            style:
                             const TextStyle(fontSize: 18, color: Colors.black),
-                      )
-                    ])),
+                          )
+                        ])),
                     const SizedBox(
                       height: 16,
                     ),
@@ -500,12 +459,12 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                           dropdownColor: Colors.white,
                           isExpanded: true,
                           items: yojanaType.map(buildYojanaMenuItems).toList(),
-                          onChanged: (value) => setState(
-                            () {
-                              yojanaTypeSelected = value as String?;
-
-                            },
-                          ),
+                          onChanged: (value) =>
+                              setState(
+                                    () {
+                                  yojanaTypeSelected = value as String?;
+                                },
+                              ),
                         ),
                       ),
                     ),
@@ -519,39 +478,46 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                   Container(
                     child: yojanaImage1 == null
                         ? Center(
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  getImageYojana1();
-                                },
-                                child: const Text("add Image")))
+                        child: ElevatedButton(
+                            onPressed: () {
+                              getImageYojana1();
+                            },
+                            child: const Text(
+                                "अनुगमन कार्यको तस्बिर लिनुहोस्")))
                         : Container(
-                            width: MediaQuery.of(context).size.width / 2,
-                            height: MediaQuery.of(context).size.width / 2,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 1,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 2,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 2,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1,
+                        ),
+                        color: Colors.grey[100],
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          getImageYojana1();
+                        },
+                        child: Container(
+                            child: yojanaImage1 == null
+                                ? const Center(
+                              child: Icon(
+                                Icons.image_search,
+                                size: 60,
                               ),
-                              color: Colors.grey[100],
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                getImageYojana1();
-                              },
-                              child: Container(
-                                  child: yojanaImage1 == null
-                                      ? const Center(
-                                          child: Icon(
-                                            Icons.image_search,
-                                            size: 60,
-                                          ),
-                                        )
-                                      : Center(
-                                          child: Image.file(
-                                          File(yojanaImage1!.path).absolute,
-                                          fit: BoxFit.fitWidth,
-                                        ))),
-                            ),
-                          ),
+                            )
+                                : Center(
+                                child: Image.file(
+                                  File(yojanaImage1!.path).absolute,
+                                  fit: BoxFit.fitWidth,
+                                ))),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -559,7 +525,7 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                 padding: const EdgeInsets.all(12.0),
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
+                  const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: Colors.black),
@@ -573,11 +539,11 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                             horizontal: 8.0, vertical: 6),
                         child: Center(
                             child: Text(
-                          "अनुगमनको क्रममा देखिएका कुराहरु:",
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        )),
+                              "अनुगमनको क्रममा देखिएका कुराहरु:",
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            )),
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
@@ -601,11 +567,12 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                                 items: radioOptions
                                     .map(buildYojanaMenuItems)
                                     .toList(),
-                                onChanged: (value) => setState(
-                                  () {
-                                    selectedRadioOptions1 = value as String;
-                                  },
-                                ),
+                                onChanged: (value) =>
+                                    setState(
+                                          () {
+                                        selectedRadioOptions1 = value as String;
+                                      },
+                                    ),
                               ),
                             ),
                           ),
@@ -633,11 +600,12 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                                 items: radioOptions
                                     .map(buildYojanaMenuItems)
                                     .toList(),
-                                onChanged: (value) => setState(
-                                  () {
-                                    selectedRadioOptions2 = value as String;
-                                  },
-                                ),
+                                onChanged: (value) =>
+                                    setState(
+                                          () {
+                                        selectedRadioOptions2 = value as String;
+                                      },
+                                    ),
                               ),
                             ),
                           ),
@@ -665,11 +633,12 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                                 items: radioOptions
                                     .map(buildYojanaMenuItems)
                                     .toList(),
-                                onChanged: (value) => setState(
-                                  () {
-                                    selectedRadioOptions3 = value as String;
-                                  },
-                                ),
+                                onChanged: (value) =>
+                                    setState(
+                                          () {
+                                        selectedRadioOptions3 = value as String;
+                                      },
+                                    ),
                               ),
                             ),
                           ),
@@ -697,11 +666,12 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                                 items: radioOptions2
                                     .map(buildYojanaMenuItems)
                                     .toList(),
-                                onChanged: (value) => setState(
-                                  () {
-                                    selectedRadioOptions4 = value as String;
-                                  },
-                                ),
+                                onChanged: (value) =>
+                                    setState(
+                                          () {
+                                        selectedRadioOptions4 = value as String;
+                                      },
+                                    ),
                               ),
                             ),
                           ),
@@ -729,11 +699,12 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                                 items: radioOptions2
                                     .map(buildYojanaMenuItems)
                                     .toList(),
-                                onChanged: (value) => setState(
-                                  () {
-                                    selectedRadioOptions5 = value as String;
-                                  },
-                                ),
+                                onChanged: (value) =>
+                                    setState(
+                                          () {
+                                        selectedRadioOptions5 = value as String;
+                                      },
+                                    ),
                               ),
                             ),
                           ),
@@ -744,7 +715,8 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0, vertical: 4),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -757,13 +729,14 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                         floatingLabelBehavior: FloatingLabelBehavior.auto,
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
+                          BorderSide(color: Colors.black, width: 1.0),
                         ),
                         labelText: 'अनुगमनमा देख्नुभएको अन्य विवरण',
-                        floatingLabelStyle:TextStyle(fontSize: 20, color: Colors.black),
+                        floatingLabelStyle: TextStyle(
+                            fontSize: 20, color: Colors.black),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
+                          BorderSide(color: Colors.black, width: 1.0),
                         ),
                         hintStyle: TextStyle(fontSize: 16, color: Colors.black),
                       ),
@@ -802,13 +775,14 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                           ),
                           TextField(
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
 
-                                labelText: 'निर्माणकर्ताको प्रतिनिधिको फोन नं.',
-                                floatingLabelStyle:TextStyle(fontSize: 20, color: Colors.black),
-                               ),
+                              labelText: 'निर्माणकर्ताको प्रतिनिधिको फोन नं.',
+                              floatingLabelStyle: TextStyle(
+                                  fontSize: 20, color: Colors.black),
+                            ),
                             controller: consRepresentetivePhone,
                           ),
                         ],
@@ -849,7 +823,7 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                                 labelStyle: const TextStyle(
                                     fontSize: 16, color: Colors.black),
                                 labelText:
-                                    'उपभोक्ता समितिको प्रतिनिधिको फोन नं.'),
+                                'उपभोक्ता समितिको प्रतिनिधिको फोन नं.'),
                             controller: consumerRepresentetivePhone,
                           ),
                         ],
@@ -862,16 +836,17 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                       decoration: const InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
+                          BorderSide(color: Colors.black, width: 1.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
+                          BorderSide(color: Colors.black, width: 1.0),
                         ),
                         labelText: 'कैफियत ',
-                        labelStyle: TextStyle(fontSize: 16, color: Colors.black),
+                        labelStyle: TextStyle(
+                            fontSize: 16, color: Colors.black),
                       ),
-                      controller: condition,
+                      controller: description2,
                     ),
                   ],
                 ),
@@ -882,72 +857,84 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
               Container(
                 child: yojanaImage2 == null
                     ? Center(
-                        child: ElevatedButton(
-                            onPressed: () {
-                              getImageYojana2();
-                            },
-                            child: const Text("तस्बिर थप गर्नुहोस्")))
+                    child: ElevatedButton(
+                        onPressed: () {
+                          getImageYojana2();
+                        },
+                        child: const Text("तस्बिर थप गर्नुहोस्")))
                     : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            height: MediaQuery.of(context).size.width / 2.5,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 1,
-                              ),
-                              color: Colors.grey[100],
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                getImageYojana2();
-                              },
-                              child: Container(
-                                  child: yojanaImage2 == null
-                                      ? const Center(
-                                          child: Icon(
-                                            Icons.image_search,
-                                            size: 60,
-                                          ),
-                                        )
-                                      : Center(
-                                          child: Image.file(
-                                          File(yojanaImage2!.path).absolute,
-                                          fit: BoxFit.cover,
-                                        ))),
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            height: MediaQuery.of(context).size.width / 2.5,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 1,
-                              ),
-                              color: Colors.grey[100],
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                getImageYojana3();
-                              },
-                              child: Container(
-                                  child: yojanaImage3 == null
-                                      ? const Center(
-                                          child: Icon(
-                                            Icons.image_search,
-                                            size: 60,
-                                          ),
-                                        )
-                                      : Center(
-                                          child: Image.file(
-                                          File(yojanaImage3!.path).absolute,
-                                          fit: BoxFit.cover,
-                                        ))),
-                            ),
-                          ),
-                        ],
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 2.5,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 2.5,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1,
+                        ),
+                        color: Colors.grey[100],
                       ),
+                      child: InkWell(
+                        onTap: () {
+                          getImageYojana2();
+                        },
+                        child: Container(
+                            child: yojanaImage2 == null
+                                ? const Center(
+                              child: Icon(
+                                Icons.image_search,
+                                size: 60,
+                              ),
+                            )
+                                : Center(
+                                child: Image.file(
+                                  File(yojanaImage2!.path).absolute,
+                                  fit: BoxFit.cover,
+                                ))),
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 2.5,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 2.5,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1,
+                        ),
+                        color: Colors.grey[100],
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          getImageYojana3();
+                        },
+                        child: Container(
+                            child: yojanaImage3 == null
+                                ? const Center(
+                              child: Icon(
+                                Icons.image_search,
+                                size: 60,
+                              ),
+                            )
+                                : Center(
+                                child: Image.file(
+                                  File(yojanaImage3!.path).absolute,
+                                  fit: BoxFit.cover,
+                                ))),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 6,
@@ -958,13 +945,13 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                       setState(() {
                         addMembers = true;
                         toggleMembers =
-                            "ग्रुप अनुगमनबाट कर्मचारी हटाउनुहोस्"; // remove members
+                        "ग्रुप अनुगमनबाट कर्मचारी हटाउनुहोस्"; // remove members
                       });
                     } else {
                       setState(() {
                         addMembers = false;
                         toggleMembers =
-                            "ग्रुप अनुगमनकोलागि कर्मचारी थप"; // add members
+                        "ग्रुप अनुगमनकोलागि कर्मचारी थप"; // add members
                       });
                     }
                   },
@@ -994,7 +981,7 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                                     title: Text(widget.addMemberList[index].name
                                         .toString()),
                                     value:
-                                        widget.addMemberList[index].isAssigned,
+                                    widget.addMemberList[index].isAssigned,
                                     onChanged: (value) {
                                       setState(() {
                                         widget.addMemberList[index].isAssigned =
@@ -1031,71 +1018,83 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
                 children: [
                   ElevatedButton(
                       onPressed: () async {
-                        if (yojanaDate != "Date") {
+                        print(widget.yojanaModel.id);
+                        if (yojanaDate != "Date" && yojanaTypeSelected != null) {
                           service.saveYojanaDraft(YojanaDraft()
+                            ..budgetId = widget.yojanaModel.id
                             ..activityName = widget.yojanaModel.activityName!
-                            ..yojanaDate = yojanaDate!
-                            ..yojanaId = widget.yojanaModel.id
+                            ..monitoringDateNep = yojanaDate!
                             ..yojanaTypeSelected = yojanaTypeSelected.toString()
-                            ..description = description.text
-                            ..previousSuggestion = previousSuggestion.text
-                            ..description2 = description2.text
-                            ..counselorRepresentative =
-                                consRepresentetiveName.text
-                            ..counselorRepresentativePhone =
-                                consRepresentetivePhone.text
-                            ..condition = condition.text
-                            ..longitude = longitude!
-                            ..latitude = latitude!
                             ..image1 = base64image1
                             ..image2 = base64image2
-                            ..image3 = base64image3);
+                            ..image3 = base64image3
+                            ..selectedRadioOptions1 = selectedRadioOptions1
+                            ..selectedRadioOptions2 = selectedRadioOptions2
+                            ..selectedRadioOptions3 = selectedRadioOptions3
+                            ..selectedRadioOptions4 = selectedRadioOptions4
+                            ..selectedRadioOptions5 = selectedRadioOptions5
+                            ..description = description.text
+                            ..constructorRepresentative = constructorRepresentative
+                            ..consRepresentetiveName = consRepresentetiveName.text
+                            ..consRepresentetivePhone = consRepresentetivePhone.text
+                            ..consumerRepresentative = consumerRepresentative
+                            ..consumerRepresentetiveName = consumerRepresentetiveName.text
+                            ..consumerRepresentetivePhone = consumerRepresentetivePhone.text
+                            ..description2 = description2.text
+                            ..longitude = longitude!
+                            ..latitude = latitude!
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
-                                  "New yojana '${widget.yojanaModel.activityName}' has be saved as draft")));
+                                  "New yojana '${widget.yojanaModel
+                                      .activityName}' has be saved as draft")));
                           Route newRoute = MaterialPageRoute(
                               builder: (_) => const YojanaMain());
                           Navigator.pushReplacement(context, newRoute);
                         } else {
                           showDialog<String>(
                             context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text("मिति चयन गरिएको छैन"),
-                              content: const Text("कृपया मिति चयन गर्नुहोस्"),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("Conform"))
-                              ],
-                            ),
+                            builder: (BuildContext context) =>
+                                AlertDialog(
+                                  title: const Text("मिति वा अनुगमनको प्रकार चयन गरिएको छैन"),
+                                  content: const Text(
+                                      "कृपया मिति र अनुगमनको प्रकार चयन गर्नुहोस्"),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("Conform"))
+                                  ],
+                                ),
                           );
                         }
                       },
                       child: const Text("ड्राफ्टको रूपमा सँञ्चित गर्नुहोस्")),
-                  //save as darft
+                  //save as draft
                   const SizedBox(
                     height: 16,
                   ),
                   ElevatedButton(
                       onPressed: () {
-                        if (yojanaDate != "Date") {
+                        if (yojanaDate != "Date" && yojanaTypeSelected != null) {
                           checkConnection();
                         } else {
                           showDialog<String>(
                             context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text("मिति चयन गरिएको छैन"),
-                              content: const Text("कृपया मिति चयन गर्नुहोस्"),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("Conform"))
-                              ],
-                            ),
+                            builder: (BuildContext context) =>
+                                AlertDialog(
+                                  title: const Text("मिति वा अनुगमनको प्रकार चयन गरिएको छैन"),
+                                  content: const Text(
+                                      "कृपया मिति र अनुगमनको प्रकार चयन गर्नुहोस्"),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("Conform"))
+                                  ],
+                                ),
                           );
                         }
                       },
@@ -1117,6 +1116,8 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
         value: yojanaType,
         child: Text(yojanaType),
       );
+
+
   final yojanaType = [
     'सुरू नभएको',
     'सुरू मात्र भएको',
@@ -1125,11 +1126,4 @@ class _YojanaDataEntryState extends State<YojanaDataEntry> {
     'सम्पन्न भएको',
     'अन्य'
   ];
-
-  DropdownMenuItem<String> buildQualityMenuItems(String qualityType) =>
-      DropdownMenuItem(
-        value: qualityType,
-        child: Text(qualityType),
-      );
-  final qualityType = ['कमजोर', 'राम्रो', 'धेरै राम्रो'];
 }

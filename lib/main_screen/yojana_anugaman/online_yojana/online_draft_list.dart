@@ -126,28 +126,20 @@ class _OnlineDraftListState extends State<OnlineDraftList> {
                               child: Column(children: [
                                 Row(
                                   children: [
-                                    const Text("Activity name :"),
+                                    const Text("योजनाको नाम: "),
                                     Text(yojanaList[index].activityName.toString()),
                                   ],
                                 ),
                                 Row(
                                   children: [
-                                    const Text("Yojana Date :"),
-                                    Text(yojanaList[index].yojanaDate.toString()),
+                                    const Text("मिति:"),
+                                    Text(yojanaList[index].monitoringDateNep.toString()),
                                   ],
                                 ),
                                 Row(
                                   children: [
-                                    const Text("Description :"),
+                                    const Text("विवरणः :"),
                                     Text(yojanaList[index].description.toString()),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const Text("counselorRepresentative :"),
-                                    Text(yojanaList[index]
-                                        .counselorRepresentative
-                                        .toString()),
                                   ],
                                 ),
                               ]),

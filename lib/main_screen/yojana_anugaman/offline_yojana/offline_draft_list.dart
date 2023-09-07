@@ -136,7 +136,7 @@ class _OfflineDraftListState extends State<OfflineDraftList> {
                                 Row(
                                   children: [
                                     const Text("Yojana Date :"),
-                                    Text(yojanaList[index].yojanaDate.toString()),
+
                                   ],
                                 ),
                                 Row(
@@ -148,9 +148,7 @@ class _OfflineDraftListState extends State<OfflineDraftList> {
                                 Row(
                                   children: [
                                     const Text("counselorRepresentative :"),
-                                    Text(yojanaList[index]
-                                        .counselorRepresentative
-                                        .toString()),
+
                                   ],
                                 ),
                               ]),

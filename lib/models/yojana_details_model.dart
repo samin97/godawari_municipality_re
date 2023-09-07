@@ -50,8 +50,8 @@ class YojanaModel {
         planningProgram: json["planningProgram"],
         yearlyBudget: json["yearly"],
         ward: json["xetra"],
-        samjotaName: json["yearly"],
-        phone: json["xetra"],
+        samjotaName: json["samjotaName"],
+        phone: json["phone"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -66,7 +66,7 @@ class YojanaModel {
         "planningProgram": planningProgram,
         "yearly": yearlyBudget,
         "xetra": ward,
-        "yearly": samjotaName,
-        "xetra": phone,
+        "samjotaName": samjotaName,
+        "phone": phone,
       };
 }

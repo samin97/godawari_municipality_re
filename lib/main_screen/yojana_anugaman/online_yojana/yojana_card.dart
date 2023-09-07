@@ -58,7 +58,7 @@ class _YojanaCardState extends State<YojanaCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Text("बार्षिक बजेट : "),
+              const Text("बार्षिक बजेट: रु."),
               Text(widget.yojanaModel.yearlyBudget.toString())
             ],
           ),
