@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 import '../../../global/global.dart';
 import '../../../global/widgets/error_dialog.dart';
@@ -25,8 +28,8 @@ class OnlineDraftDetails extends StatefulWidget {
   State<OnlineDraftDetails> createState() => _OnlineDraftDetailsState();
 }
 
-List<String> radioOptions = ['नभएको', 'भएको'];
-List<String> radioOptions2 = ['नराखेको', 'राखेको'];
+List<String> radioOptions = ['नभएको', 'भएको', 'आवश्यक नपर्ने'];
+List<String> radioOptions2 = ['नराखेको', 'राखेको','आवश्यक नपर्ने'];
 
 class _OnlineDraftDetailsState extends State<OnlineDraftDetails> {
   String base64image1 = "noImage";
@@ -38,6 +41,8 @@ class _OnlineDraftDetailsState extends State<OnlineDraftDetails> {
   String? longitude;
   String? activityName;
   String? monitoringDateNep;
+  String base64image4 = "noImage";
+  String base64image5 = "noImage";
 
   TextEditingController description = TextEditingController();
   TextEditingController description2 = TextEditingController();
@@ -48,6 +53,11 @@ class _OnlineDraftDetailsState extends State<OnlineDraftDetails> {
 
   bool addMembers = false;
   String toggleMembers = "ग्रुप अनुगमनकोलागि कर्मचारी थप";
+
+  bool measurementBook = false;
+
+  bool imageUpdated1 = false;
+  bool imageUpdated2 = false;
 
   @override
   void initState() {
@@ -76,10 +86,50 @@ class _OnlineDraftDetailsState extends State<OnlineDraftDetails> {
       description2.text = widget.draftModel.description2;
       latitude = widget.draftModel.latitude;
       longitude = widget.draftModel.longitude;
+      measurementBook = widget.draftModel.measurementImage;
+      base64image4 = widget.draftModel.measurementImage1;
+      base64image5 = widget.draftModel.measurementImage2;
 
       yojanaMemberURL = yojanaMemberURL + widget.draftModel.budgetId.toString();
     });
+    print(widget.draftModel.measurementImage1);
     super.initState();
+  }
+
+  File? measurementImage1;
+  final measurementImagePicker1 = ImagePicker();
+  bool imageChangeSelected = true;
+
+  Future getMeasurementImage1() async {
+    final pickedFile = await measurementImagePicker1.pickImage(
+        source: ImageSource.camera, imageQuality: 70);
+
+    if (pickedFile != null) {
+      measurementImage1 = File(pickedFile.path);
+      Uint8List image = await pickedFile.readAsBytes();
+      setState(() {
+        base64image4 = base64Encode(image);
+        imageUpdated1 = true;
+        imageChangeSelected = false;
+      });
+    }
+  }
+
+  File? measurementImage2;
+  final measurementImagePicker2 = ImagePicker();
+
+  Future getMeasurementImage2() async {
+    final pickedFile = await measurementImagePicker2.pickImage(
+        source: ImageSource.camera, imageQuality: 70);
+
+    if (pickedFile != null) {
+      measurementImage2 = File(pickedFile.path);
+      Uint8List image = await pickedFile.readAsBytes();
+      setState(() {
+        base64image5 = base64Encode(image);
+        imageUpdated2 = true;
+      });
+    }
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -250,7 +300,7 @@ class _OnlineDraftDetailsState extends State<OnlineDraftDetails> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0),
                       child: Text(
-                        "Date :${widget.draftModel.monitoringDateNep}",
+                        "मिति: ${widget.draftModel.monitoringDateNep}",
                         style: const TextStyle(fontSize: 16),
                       ),
                     ),
@@ -595,56 +645,210 @@ class _OnlineDraftDetailsState extends State<OnlineDraftDetails> {
                   ],
                 ),
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        if (widget.draftModel.image1 != "noImage") ...[
-                          Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: MemoryImage(base64Decode(
-                                        widget.draftModel.image1)))),
-                          ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          if (widget.draftModel.image1 != "noImage") ...[
+                            Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: MemoryImage(base64Decode(
+                                          widget.draftModel.image1)))),
+                            ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        if (widget.draftModel.image2 != "noImage") ...[
-                          Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: MemoryImage(base64Decode(
-                                        widget.draftModel.image2)))),
-                          ),
-                        ] else
-                          ...[],
-                      ],
+                    Expanded(
+                      child: Column(
+                        children: [
+                          if (widget.draftModel.image2 != "noImage") ...[
+                            Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: MemoryImage(base64Decode(
+                                          widget.draftModel.image2)))),
+                            ),
+                          ] else
+                            ...[],
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        if (widget.draftModel.image3 != "noImage") ...[
-                          Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: MemoryImage(base64Decode(
-                                        widget.draftModel.image3)))),
-                          ),
-                        ]
-                      ],
+                    Expanded(
+                      child: Column(
+                        children: [
+                          if (widget.draftModel.image3 != "noImage") ...[
+                            Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: MemoryImage(base64Decode(
+                                          widget.draftModel.image3)))),
+                            ),
+                          ]
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: Colors.black),
+                  ),
+                  child: Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text('अनुगमन गर्दैगर्दा नापजाप पनि गर्दै हनुहुन्छ ?'),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                        value: measurementBook,
+                        onChanged: (value) {
+                          setState(() {
+                            measurementBook = value ?? false;
+                          });
+                        },
+                      ),
+                      Visibility(
+                        visible: measurementBook,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                child: widget.draftModel.measurementImage1 == "noImage" &&
+                                    imageChangeSelected
+                                    ? Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                      child: ElevatedButton(
+                                          onPressed: () {
+                                            getMeasurementImage1();
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(  vertical: 8.0),
+                                            child: const Text(
+                                                "नापजाप गरेको नापी किताव (Measurement Book) अपलोड गर्नुहोस्"),
+                                          )),
+                                    ))
+                                    : Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      width:
+                                      MediaQuery.of(context).size.width / 2.5,
+                                      height:
+                                      MediaQuery.of(context).size.width / 2.5,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 1,
+                                        ),
+                                        color: Colors.grey[100],
+                                      ),
+                                      child: InkWell(
+                                        onTap: () {
+                                          getMeasurementImage1();
+                                        },
+                                        child: Container(
+                                            child: base64image4 == "noImage"
+                                                ? const Center(
+                                              child: Icon(
+                                                Icons.image_search,
+                                                size: 60,
+                                              ),
+                                            )
+                                                : imageUpdated1
+                                                ? Center(
+                                                child: Image.file(
+                                                  File(measurementImage1!
+                                                      .path)
+                                                      .absolute,
+                                                  fit: BoxFit.cover,
+                                                ))
+                                                : Center(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: MemoryImage(
+                                                            base64Decode(widget
+                                                                .draftModel
+                                                                .measurementImage1)))),
+                                              ),
+                                            )),
+                                      ),
+                                    ),
+                                    Container(
+                                      width:
+                                      MediaQuery.of(context).size.width / 2.5,
+                                      height:
+                                      MediaQuery.of(context).size.width / 2.5,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 1,
+                                        ),
+                                        color: Colors.grey[100],
+                                      ),
+                                      child: InkWell(
+                                        onTap: () {
+                                          getMeasurementImage2();
+                                        },
+                                        child: Container(
+                                            child: base64image5 == "noImage"
+                                                ? const Center(
+                                              child: Icon(
+                                                Icons.image_search,
+                                                size: 60,
+                                              ),
+                                            )
+                                                : imageUpdated2
+                                                ? Center(
+                                                child: Image.file(
+                                                  File(measurementImage2!
+                                                      .path)
+                                                      .absolute,
+                                                  fit: BoxFit.cover,
+                                                ))
+                                                : Center(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: MemoryImage(
+                                                            base64Decode(widget
+                                                                .draftModel
+                                                                .measurementImage2)))),
+                                              ),
+                                            )),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0,left: 8,right: 8),
+                                child: Text(
+                                  "नोटः तपाइले तयार गर्नुभएको नापी बुकमा तपाइ प्राविधिकको नाम र हस्ताक्षर भएको हुनुपर्ने छ ।",
+                                  style: TextStyle(
+                                      fontSize: 12, fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
               ElevatedButton(
                   onPressed: () {
                     if (addMembers == false) {
@@ -739,7 +943,10 @@ class _OnlineDraftDetailsState extends State<OnlineDraftDetails> {
                                 consumerRepresentetivePhone.text
                             ..description2 = description2.text
                             ..longitude = longitude!
-                            ..latitude = latitude!);
+                            ..latitude = latitude!
+                            ..measurementImage = measurementBook
+                            ..measurementImage1 = base64image4
+                            ..measurementImage2 = base64image5);
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
                                   "Yojana '${widget.draftModel.activityName}' has be saved as draft")));

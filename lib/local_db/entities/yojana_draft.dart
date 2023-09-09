@@ -1,13 +1,9 @@
-
-
 import 'package:isar/isar.dart';
 
 part 'yojana_draft.g.dart';
 
 @Collection()
-
-
-class YojanaDraft{
+class YojanaDraft {
   Id id = Isar.autoIncrement;
   late int budgetId;
   late String activityName;
@@ -29,6 +25,9 @@ class YojanaDraft{
   late String consumerRepresentetiveName;
   late String consumerRepresentetivePhone;
   late String description2;
+  late bool measurementImage;
+  late String measurementImage1;
+  late String measurementImage2;
   late String latitude;
   late String longitude;
 }

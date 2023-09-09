@@ -114,7 +114,7 @@ class _YojanaReportDetailsState extends State<YojanaReportDetails> {
                       },
                     ),
                     Text(
-                      "ननिर्माणकर्ताको प्रतिनिधिको नाम: ${yojanaReportDetails.consRepresentetiveName ?? ""}",
+                      "निर्माणकर्ताको प्रतिनिधिको नाम: ${yojanaReportDetails.consRepresentetiveName ?? ""}",
                       style: const TextStyle(fontSize: 16),
                     ),
                     Text(

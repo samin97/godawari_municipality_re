@@ -77,7 +77,7 @@ class _OnlineDraftListState extends State<OnlineDraftList> {
                   color: Colors.black,
                 )),
             const Text(
-              "Drafts",
+              "ड्राफ्ट",
               style: TextStyle(color: Colors.white, fontSize: 24),
             ),
             IconButton(
@@ -103,7 +103,7 @@ class _OnlineDraftListState extends State<OnlineDraftList> {
                     child: CircularProgressIndicator(),
                   );
                 }
-                if (snapshot.hasData) {
+                if (snapshot.hasData && snapshot.data.length > 0) {
                   print(snapshot.hasData);
                   List<YojanaDraft> yojanaList = snapshot.data;
 
@@ -132,7 +132,7 @@ class _OnlineDraftListState extends State<OnlineDraftList> {
                                 ),
                                 Row(
                                   children: [
-                                    const Text("मिति:"),
+                                    const Text("मिति: "),
                                     Text(yojanaList[index].monitoringDateNep.toString()),
                                   ],
                                 ),

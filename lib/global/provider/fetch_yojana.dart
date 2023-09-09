@@ -24,6 +24,8 @@ Future<List<YojanaModel>> fetchYojana() async {
 
     List<YojanaModel> list =
         parsed.map((json) => YojanaModel.fromJson(json)).toList();
+
+
         return list;
   } else {
     throw Exception('Failed to load attendance log');

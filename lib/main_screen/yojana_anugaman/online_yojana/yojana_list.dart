@@ -31,8 +31,9 @@ class _YojanaListState extends State<YojanaList> {
                   child: CircularProgressIndicator(),
                 );
               }
-              print(snapshot.hasData);
-              if (snapshot.hasData) {
+              print(snapshot.data);
+              print(snapshot);
+              if (snapshot.data.length > 0 ){
                 print(snapshot);
                 List<YojanaModel> yojanaList = snapshot.data;
 
@@ -52,8 +53,13 @@ class _YojanaListState extends State<YojanaList> {
                           child: YojanaCard(yojanaModel: yojanaList[index]));
                     });
               } else {
-                return const Center(
-                  child: Text("There is no yojana assigned to you yet"),
+                return Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: const Center(
+                      child: Text("There is no yojana assigned to you yet"),
+                    ),
+                  ),
                 );
               }
             },
