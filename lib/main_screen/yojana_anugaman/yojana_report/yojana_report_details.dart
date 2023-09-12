@@ -37,12 +37,9 @@ class _YojanaReportDetailsState extends State<YojanaReportDetails> {
       },
     );
 
-    print(widget.id);
     if (response.statusCode == 200) {
-      print(response.body);
       YojanaReportModel _yojanaReportModel =
           YojanaReportModel.fromJson(jsonDecode(response.body));
-      print(_yojanaReportModel);
       return _yojanaReportModel;
     } else {
       throw Exception('Failed to load attendance log');
@@ -59,14 +56,10 @@ class _YojanaReportDetailsState extends State<YojanaReportDetails> {
             child: CircularProgressIndicator(),
           );
         }
-        print(snapshot.hasData);
         if (snapshot.hasData) {
           YojanaReportModel yojanaReportDetails = snapshot.data;
-          print(yojanaReportDetails.whatYouSaw);
           String whatYouSawList = yojanaReportDetails.whatYouSaw ?? "No items";
-
           List<String> WYSList = whatYouSawList.split(",");
-          print(WYSList);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

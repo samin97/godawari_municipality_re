@@ -3,10 +3,11 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:new_version_plus/new_version_plus.dart';
+import 'package:smart_attendance/main_screen/employee_home_offline.dart';
+import 'package:smart_attendance/main_screen/yojana_anugaman/offline_yojana/offline_yojana_list.dart';
 import 'package:smart_attendance/models/registration_model.dart';
 import '../../global/widgets/error_dialog.dart';
 import '../../global/global.dart';
-import '../attendance/offline_home.dart';
 import '../employee_home_screen.dart';
 import '../../models/login_model.dart';
 import '../../models/login_response_model.dart';
@@ -71,72 +72,51 @@ class _LoginState extends State<Login> {
     }
   }
 
-  offlineLogin() {
-    if (usernameController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty) {
-      checkIfOffline();
-    } else {
-      showDialog(
-          context: context,
-          builder: (c) {
-            return const ErrorDialog(
-              message: "Please write email/password",
-            );
-          });
-    }
+
+
+
+
+
+
+  offlineAlertDialog(BuildContext context) {
+
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Cancel"),
+      onPressed:  () {
+
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: const Text("Continue"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+        Route newRoute = MaterialPageRoute(builder: (_) => const EmployeeHomeOffline());
+        Navigator.pushReplacement(context, newRoute);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("Currently Offline"),
+      content: const Text("Would you like to continue to offline home screen?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
-  loginOffline() {
-    if (usernameController.text == sharedPreferences!.getString("username")! &&
-        passwordController.text == sharedPreferences!.getString("password")!) {
-      Route newRoute = MaterialPageRoute(builder: (_) => const OfflineHome());
-      Navigator.pushReplacement(context, newRoute);
-      const snackBar = SnackBar(
-        content: Text('Logging in offline'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } else {
-      failedSignIn();
-    }
-  }
 
-  Future checkIfOffline() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile) {
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text("You are online."),
-          content: const Text("Please login through online."),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text("Conform"))
-          ],
-        ),
-      );
-    } else if (connectivityResult == ConnectivityResult.wifi) {
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text("You are online."),
-          content: const Text("Please login through online."),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text("Conform"))
-          ],
-        ),
-      );
-    } else {
-      loginOffline();
-      //localStorage();
-    }
-  }
 
   formValidation() {
     if (usernameController.text.isNotEmpty &&
@@ -160,21 +140,7 @@ class _LoginState extends State<Login> {
     } else if (connectivityResult == ConnectivityResult.wifi) {
       loginNow();
     } else {
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text("You are offline."),
-          content: const Text("Internet connection is required to login."),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text("Conform"))
-          ],
-        ),
-      );
-      //localStorage();
+      offlineLogin();
     }
   }
 
@@ -255,11 +221,18 @@ class _LoginState extends State<Login> {
 
       await sharedPreferences?.setString("password", passwordController.text);
       await sharedPreferences?.setString("username", usernameController.text);
-      print(sharedPreferences!.getString("password")!);
-      print(sharedPreferences!.getString("username")!);
-      print(userDetails);
       Route newRoute = MaterialPageRoute(builder: (_) => const EmployeeHomeScreen());
       Navigator.pushReplacement(context, newRoute);
+    } else {
+      failedSignIn();
+    }
+  }
+
+  offlineLogin() {
+    if (usernameController.text ==
+        sharedPreferences!.getString("username") &&
+        passwordController.text == sharedPreferences!.getString("password")) {
+      offlineAlertDialog(context);
     } else {
       failedSignIn();
     }
@@ -513,7 +486,7 @@ class _LoginState extends State<Login> {
                   children: [
                     Container(),
                     Image.asset(
-                      'images/logo.jpg',
+                      'images/app_icon.png',
                       fit: BoxFit.contain,
                       height: 120,
                     ),

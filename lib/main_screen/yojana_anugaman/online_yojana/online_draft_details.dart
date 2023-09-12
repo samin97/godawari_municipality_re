@@ -92,7 +92,6 @@ class _OnlineDraftDetailsState extends State<OnlineDraftDetails> {
 
       yojanaMemberURL = yojanaMemberURL + widget.draftModel.budgetId.toString();
     });
-    print(widget.draftModel.measurementImage1);
     super.initState();
   }
 
@@ -133,13 +132,6 @@ class _OnlineDraftDetailsState extends State<OnlineDraftDetails> {
   }
 
   final _formKey = GlobalKey<FormState>();
-
-  DropdownMenuItem<String> buildQualityMenuItems(String qualityType) =>
-      DropdownMenuItem(
-        value: qualityType,
-        child: Text(qualityType),
-      );
-  final qualityType = ['कमजोर', 'राम्रो', 'धेरै राम्रो'];
 
   deleteDraft(BuildContext context) {
     // set up the buttons

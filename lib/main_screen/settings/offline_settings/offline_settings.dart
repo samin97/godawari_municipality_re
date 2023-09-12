@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../attendance/offline_home.dart';
+import '../../employee_home_offline.dart';
 import '../../public_home/employee_login.dart';
-import 'offline_draft_list.dart';
-
+import '../../public_home/public_home_screen.dart';
 class OfflineSettings extends StatefulWidget {
   const OfflineSettings({Key? key}) : super(key: key);
 
@@ -23,7 +22,7 @@ class _OfflineSettingsState extends State<OfflineSettings> {
             IconButton(
                 onPressed: () {
                   Route newRoute =
-                  MaterialPageRoute(builder: (_) => const OfflineHome());
+                  MaterialPageRoute(builder: (_) => const EmployeeHomeOffline());
                   Navigator.pushReplacement(context, newRoute);
                 },
                 icon: const Icon(
@@ -42,40 +41,14 @@ class _OfflineSettingsState extends State<OfflineSettings> {
       ),
       body: Column(
         children: [
-
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: InkWell(
               onTap: () {
                 Route newRoute =
-                MaterialPageRoute(builder: (_) => const OfflineDraftList());
-                Navigator.pushReplacement(context, newRoute);
-              },
-              child: Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black45),
-                    borderRadius: BorderRadius.circular(5)
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Your Drafts", style: TextStyle(fontSize: 20),),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.grey,
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: InkWell(
-              onTap: () {
-                Route newRoute =
-                MaterialPageRoute(builder: (_) => const Login());
+                MaterialPageRoute(builder: (_) => const PublicHomeScreen(
+                  pageIndex: 3,
+                ));
                 Navigator.pushReplacement(context, newRoute);
               },
               child: Container(
@@ -103,5 +76,3 @@ class _OfflineSettingsState extends State<OfflineSettings> {
     );
   }
 }
-
-

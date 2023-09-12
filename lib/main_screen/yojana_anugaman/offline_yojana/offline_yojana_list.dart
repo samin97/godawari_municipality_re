@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:smart_attendance/main_screen/employee_home_offline.dart';
 
 import '../../../global/widgets/error_dialog.dart';
 import '../../../local_db/entities/offline_yojana_list.dart';
 import '../../../local_db/isarServices.dart';
 import '../../../models/yojana_details_model.dart';
-import 'offline_settings.dart';
-import 'offline_yojana_details.dart';
+import 'offline_yojana_settings.dart';
+import 'offline_yojana_data_entry.dart';
 import 'offline_yojana_list_card.dart';
 
 
-class OfflineHome extends StatefulWidget {
-  const OfflineHome({Key? key}) : super(key: key);
+class OfflineYojanaList extends StatefulWidget {
+  const OfflineYojanaList({Key? key}) : super(key: key);
 
   @override
-  State<OfflineHome> createState() => _OfflineHomeState();
+  State<OfflineYojanaList> createState() => _OfflineYojanaListState();
 }
 
-class _OfflineHomeState extends State<OfflineHome> {
+class _OfflineYojanaListState extends State<OfflineYojanaList> {
   final service = IsarService();
 
 
@@ -96,18 +97,28 @@ class _OfflineHomeState extends State<OfflineHome> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            IconButton(
+                onPressed: () {
+                  Route newRoute =
+                  MaterialPageRoute(builder: (_) => const EmployeeHomeOffline());
+                  Navigator.pushReplacement(context, newRoute);
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                )),
             const Text(
-              "Offline Home",
+              "योजनाअनुगमन",
               style: TextStyle(color: Colors.white, fontSize: 24),
             ),
             IconButton(
                 onPressed: () {
                   Route newRoute = MaterialPageRoute(
-                      builder: (_) => const OfflineSettings());
+                      builder: (_) => const OfflineYojanaOptions());
                   Navigator.pushReplacement(context, newRoute);
                 },
                 icon: const Icon(
-                  Icons.settings,
+                  Icons.more_vert,
                   color: Colors.white,
                 )),
           ],
@@ -135,7 +146,7 @@ class _OfflineHomeState extends State<OfflineHome> {
                         return InkWell(
                             onTap: () {
                               Route newRoute = MaterialPageRoute(
-                                  builder: (_) => OfflineYojanaDetail(
+                                  builder: (_) => OfflineYojanaDataEntry(
                                     yojanaModel: YojanaModel(
                                       id: offlineYojanaList[index].yojanaId,
                                         activityName:

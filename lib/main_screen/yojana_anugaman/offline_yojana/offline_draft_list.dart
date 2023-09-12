@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../local_db/entities/yojana_draft.dart';
 import '../../../local_db/isarServices.dart';
 import 'offline_draft details.dart';
-import 'offline_settings.dart';
+import 'offline_yojana_settings.dart';
 
 
 class OfflineDraftList extends StatefulWidget {
@@ -72,7 +72,7 @@ class _OfflineDraftListState extends State<OfflineDraftList> {
             IconButton(
                 onPressed: () {
                   Route newRoute =
-                      MaterialPageRoute(builder: (_) => const OfflineSettings());
+                      MaterialPageRoute(builder: (_) => const OfflineYojanaOptions());
                   Navigator.pushReplacement(context, newRoute);
                 },
                 icon: const Icon(
@@ -80,7 +80,7 @@ class _OfflineDraftListState extends State<OfflineDraftList> {
                   color: Colors.black,
                 )),
             const Text(
-              "Drafts",
+              "ड्राफ्ट",
               style: TextStyle(color: Colors.white, fontSize: 24),
             ),
             IconButton(
@@ -129,26 +129,20 @@ class _OfflineDraftListState extends State<OfflineDraftList> {
                               child: Column(children: [
                                 Row(
                                   children: [
-                                    const Text("Activity name :"),
+                                    const Text("योजनाको नाम: "),
                                     Text(yojanaList[index].activityName.toString()),
                                   ],
                                 ),
                                 Row(
                                   children: [
-                                    const Text("Yojana Date :"),
-
+                                    const Text("मिति: "),
+                                    Text(yojanaList[index].monitoringDateNep.toString()),
                                   ],
                                 ),
                                 Row(
                                   children: [
-                                    const Text("Description :"),
+                                    const Text("विवरणः :"),
                                     Text(yojanaList[index].description.toString()),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const Text("counselorRepresentative :"),
-
                                   ],
                                 ),
                               ]),

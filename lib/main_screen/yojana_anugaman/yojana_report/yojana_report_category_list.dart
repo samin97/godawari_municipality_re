@@ -22,7 +22,6 @@ class YojanaReportCategoryList extends StatefulWidget {
 }
 
 class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
-
   Future<AnugamanReportItemListModel> fetchReportItemsList() async {
     var url =
         "http://mis.godawarimun.gov.np/Api/Anugaman/GetAllAnugamanReport/" +
@@ -45,7 +44,7 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
     }
   }
 
-  Future<List<AnugamanReportCategoryModel>> fetchReportCategory() async {
+  Future<AnugamanReportCategoryModel> fetchReportCategory() async {
     var url =
         "http://mis.godawarimun.gov.np/Api/Anugaman/GetReportSelectedCategory/" +
             widget.yojanaModel.id.toString();
@@ -60,15 +59,11 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
     print(response.body);
 
     if (response.statusCode == 200) {
-      List<dynamic> parsed =
-          json.decode(response.body).cast<Map<String, dynamic>>();
 
-      List<AnugamanReportCategoryModel> list = parsed
-          .map((json) => AnugamanReportCategoryModel.fromJson(json))
-          .toList();
-      print(list);
-
-      return list;
+      AnugamanReportCategoryModel categoryModel =
+          AnugamanReportCategoryModel.fromJson(jsonDecode(response.body));
+      return categoryModel;
+      return categoryModel;
     } else {
       throw Exception('Failed to load attendance log');
     }
@@ -107,7 +102,7 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.max,
             children: [
-              FutureBuilder<List<AnugamanReportCategoryModel>>(
+              FutureBuilder<AnugamanReportCategoryModel>(
                 future: fetchReportCategory(),
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -116,7 +111,7 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
                     );
                   }
                   if (snapshot.hasData) {
-                    List<AnugamanReportCategoryModel> yojanaCategoryDetails =
+                    AnugamanReportCategoryModel yojanaCategoryDetails =
                         snapshot.data;
                     return Card(
                       elevation: 0,
@@ -135,7 +130,7 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
                                   style: TextStyle(fontSize: 16),
                                 ),
                                 Text(
-                                    yojanaCategoryDetails[0]
+                                    yojanaCategoryDetails
                                         .activityName
                                         .toString(),
                                     softWrap: false,
@@ -150,7 +145,7 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
                                 const Text("वर्ष: ",
                                     style: TextStyle(fontSize: 16)),
                                 Text(
-                                    yojanaCategoryDetails[0]
+                                    yojanaCategoryDetails
                                         .fiscalYear
                                         .toString(),
                                     style: TextStyle(fontSize: 16))
@@ -229,7 +224,7 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
                                 const Text("सम्झौता मिति: ",
                                     style: TextStyle(fontSize: 16)),
                                 Text(
-                                    yojanaCategoryDetails[0]
+                                    yojanaCategoryDetails
                                         .samjautaDate
                                         .toString(),
                                     style: TextStyle(fontSize: 16))
@@ -241,7 +236,7 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
                                 const Text("अन्त्य मिति : ",
                                     style: TextStyle(fontSize: 16)),
                                 Text(
-                                    yojanaCategoryDetails[0].endDate.toString(),
+                                    yojanaCategoryDetails.endDate.toString(),
                                     style: TextStyle(fontSize: 16))
                               ],
                             ),
@@ -252,7 +247,7 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
                                     style: TextStyle(fontSize: 16)),
                                 Expanded(
                                   child: Text(
-                                      yojanaCategoryDetails[0]
+                                      yojanaCategoryDetails
                                           .upaBhoktaSamitiName
                                           .toString(),
                                       softWrap: false,
@@ -269,7 +264,7 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
                                 const Text("कुल्ल लगत: ",
                                     style: TextStyle(fontSize: 16)),
                                 Text(
-                                    yojanaCategoryDetails[0]
+                                    yojanaCategoryDetails
                                         .kulLagat
                                         .toString(),
                                     style: TextStyle(fontSize: 16))
@@ -423,25 +418,30 @@ class _YojanaReportCategoryListState extends State<YojanaReportCategoryList> {
                           },
                           separatorBuilder: (BuildContext context, int index) {
                             return LayoutBuilder(
-                              builder: (BuildContext context, BoxConstraints constraints) {
+                              builder: (BuildContext context,
+                                  BoxConstraints constraints) {
                                 final boxWidth = constraints.constrainWidth();
                                 final dashWidth = 6.0;
-                                final dashCount = (boxWidth / (2 * dashWidth)).floor();
+                                final dashCount =
+                                    (boxWidth / (2 * dashWidth)).floor();
                                 return Flex(
                                   children: List.generate(dashCount, (_) {
                                     return SizedBox(
                                       width: dashWidth,
                                       height: 1,
                                       child: DecoratedBox(
-                                        decoration: BoxDecoration(color: Colors.grey),
+                                        decoration:
+                                            BoxDecoration(color: Colors.grey),
                                       ),
                                     );
                                   }),
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   direction: Axis.horizontal,
                                 );
                               },
-                            );;
+                            );
+                            ;
                           },
                         ),
                       ],

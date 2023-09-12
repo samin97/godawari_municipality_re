@@ -641,7 +641,7 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
                                     builder: (_) => const YojanaMain());
                                 Navigator.pushReplacement(context, newRoute);
                               },
-                              icon: Image.asset('images/yojanaImage.png',height: 50),
+                              icon: Image.asset('images/yojanaImage.png',height: 35,),
                             ),
                           ),
                           const Spacer(flex: 1),
