@@ -118,10 +118,33 @@ class _LoginState extends State<Login> {
 
 
 
-  formValidation() {
+  formValidation() async {
     if (usernameController.text.isNotEmpty &&
         passwordController.text.isNotEmpty) {
-      checkConnection();
+
+      final newVersion = NewVersionPlus(
+        iOSId: 'com.DEBUGSOFT.godawari_app',
+        androidId: 'com.DEBUGSOFT.godawari_app',
+      );
+      final status = await newVersion.getVersionStatus();
+      if (status != null) {
+        debugPrint(status.releaseNotes);
+        debugPrint(status.appStoreLink);
+        debugPrint(status.localVersion);
+        debugPrint(status.storeVersion);
+        debugPrint(status.canUpdate.toString());
+        if(status.canUpdate){
+          newVersion.showUpdateDialog(
+            context: context,
+            versionStatus: status,
+            dialogTitle: 'New version available',
+            dialogText: 'Please update application',
+          );
+        }else
+          {
+            checkConnection();
+          }
+      }
     } else {
       showDialog(
           context: context,

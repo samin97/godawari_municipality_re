@@ -6,24 +6,24 @@ String attendanceModelToJson(AttendanceModel data) => json.encode(data.toJson())
 
 class AttendanceModel {
   AttendanceModel({
-    required this.nepaliDate,
-    required this.englishDate,
-    required this.attendDateTime,
-    required this.latitude,
-    required this.longitude,
-    required this.deviceId,
+     this.nepaliDate,
+     this.englishDate,
+     this.attendDateTime,
+     this.latitude,
+     this.longitude,
+     this.deviceId,
     this.networkId,
     this.altitude,
-    required this.status,
-    required this.mobileNo,
+     this.status,
+     this.mobileNo,
   });
 
   String? nepaliDate;
   String? englishDate;
-  String attendDateTime;
+  String? attendDateTime;
   String? latitude;
   String? longitude;
-  String deviceId;
+  String? deviceId;
   String? networkId;
   String? altitude;
   String? status;

@@ -246,7 +246,7 @@ class _OvertimeAttendanceState extends State<OvertimeAttendance> {
                   Row(
                     children: [
                       const Expanded(flex: 1, child: Text("Device Id")),
-                      Expanded(flex: 1, child: Text(attendanceModel.deviceId)),
+                      Expanded(flex: 1, child: Text(attendanceModel.deviceId!)),
                     ],
                   ),
                   Row(

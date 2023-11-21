@@ -61,6 +61,8 @@ class _EmployeeHomeScreenState extends State<EmployeeHomeScreen> {
     handleLocationPermission();
   }
 
+
+
   checkHoliday() {
     String today = DateFormat('EEEE').format(DateTime.now());
     if (today.toLowerCase() == "saturday") {

@@ -51,6 +51,12 @@ class _AttendanceCheckOutState extends State<AttendanceCheckOut> {
     attendanceDetails();
   }
 
+  @override
+  void dispose()
+  {
+    super.dispose();
+  }
+
   Future<void> lastAttendance() async {
     final token = sharedPreferences!.getString("token")!;
     final response = await http.get(
@@ -95,15 +101,21 @@ class _AttendanceCheckOutState extends State<AttendanceCheckOut> {
     final DateFormat formatter = DateFormat('yyyy/MM/dd');
     final String englishFormatted = formatter.format(now);
     //attendDateTime:
-
-    currentTime = timeFormat.format(timeNow);
+    final responseTime = await http.get(
+      Uri.parse('http://mis.godawarimun.gov.np/Api/Auth/GetServerTime'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    String _currentTime = responseTime.body;
+    currentTime = responseTime.body;
     String isoAttendDateTime = now.toIso8601String();
     //latitude, longitude and attitude:
     Position newPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     position = newPosition;
     //deviceId:
-    deviceInfo = sharedPreferences!.getString("userUUID")!;
+    deviceInfo = sharedPreferences!.getString("userUUID");
 
     //networkId:
     final info = NetworkInfo();
@@ -112,7 +124,7 @@ class _AttendanceCheckOutState extends State<AttendanceCheckOut> {
     setState(() {
       attendanceModel.nepaliDate = nepaliFormatted.trim();
       attendanceModel.englishDate = englishFormatted.trim();
-      attendanceModel.attendDateTime = isoAttendDateTime.trim();
+      attendanceModel.attendDateTime = currentTime.trim();
       attendanceModel.latitude = position?.latitude.toString();
       attendanceModel.longitude = position?.longitude.toString();
       attendanceModel.deviceId = deviceInfo;
@@ -158,7 +170,13 @@ class _AttendanceCheckOutState extends State<AttendanceCheckOut> {
       WorkCheckTime.fromJson(jsonDecode(response.body));
       print(currentTime);
       String defaultDate = "0001-01-01 ";
-      String _currentTime = currentTime;
+      final responseTime = await http.get(
+        Uri.parse('http://mis.godawarimun.gov.np/Api/Auth/GetServerTime'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      String _currentTime = responseTime.body;
       String allowedTime = _workCheckTime.upasthitHunaPauneSamayaSimaAaanyaDin;
       DateTime dt1 = DateTime.parse(defaultDate + _currentTime);
       DateTime dt2 = DateTime.parse(defaultDate + allowedTime);
@@ -212,6 +230,7 @@ class _AttendanceCheckOutState extends State<AttendanceCheckOut> {
   }
 
   Future checkLocation() async {
+
     if (attendanceModel.deviceId != sharedPreferences!.getString("deviceId")!) {
       return showDialog<String>(
         context: context,
@@ -298,7 +317,7 @@ class _AttendanceCheckOutState extends State<AttendanceCheckOut> {
     }
   }
 
-  final double textSize = 20;
+  final double textSize = 16;
 
   @override
   Widget build(BuildContext context) {
@@ -308,12 +327,12 @@ class _AttendanceCheckOutState extends State<AttendanceCheckOut> {
         child: Column(
           children: [
             Visibility(
-                visible: !hasAttended,
+                visible: hasAttended,
                 child: const Center(
                   child: Text("कृपया पहिले उपस्थिति पेश गर्नुहोस् ।"),
                 )),
             Visibility(
-              visible: hasAttended,
+              visible: !hasAttended,
               child: Column(
                 children: [
                   Row(
@@ -352,7 +371,7 @@ class _AttendanceCheckOutState extends State<AttendanceCheckOut> {
                               style: TextStyle(fontSize: textSize))),
                       Expanded(
                           flex: 1,
-                          child: Text(currentTime,
+                          child: Text(currentTime +" (Server Time)",
                               style: TextStyle(fontSize: textSize))),
                     ],
                   ),
@@ -388,7 +407,7 @@ class _AttendanceCheckOutState extends State<AttendanceCheckOut> {
                               style: TextStyle(fontSize: textSize))),
                       Expanded(
                           flex: 1,
-                          child: Text(attendanceModel.deviceId,
+                          child: Text(attendanceModel.deviceId.toString(),
                               style: TextStyle(fontSize: textSize))),
                     ],
                   ),

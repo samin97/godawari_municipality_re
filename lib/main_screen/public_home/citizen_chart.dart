@@ -17,33 +17,6 @@ class CitizenChart extends StatefulWidget {
 
 class _CitizenChartState extends State<CitizenChart> {
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  var sakhaList = [''];
-  Future getSakhaList() async {
-    var url = "http://mis.godawarimun.gov.np/Api/WadaPatra/GetSakha";
-
-    final response = await http.get(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-    if (response.statusCode == 200) {
-      var jsonData = json.decode(response.body);
-      print(jsonData);
-      setState(() {
-        sakhaList = jsonData;
-      });
-
-    } else {
-      throw Exception('Failed to load event log');
-    }
-  }
 
   Future<List<CitizenChartModel>> getSakha() async {
     var url = "http://mis.godawarimun.gov.np/Api/WadaPatra/GetWadaPatra?sakha=";

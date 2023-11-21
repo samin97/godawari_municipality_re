@@ -23,7 +23,7 @@ class AttendanceCheckIn extends StatefulWidget {
 class _AttendanceCheckInState extends State<AttendanceCheckIn> {
   Position? position;
   TextEditingController phoneNumberController = TextEditingController();
-  late AttendanceModel attendanceModel = AttendanceModel(
+   AttendanceModel attendanceModel = AttendanceModel(
       nepaliDate: "nepaliDate",
       englishDate: "englishDate",
       attendDateTime: "attendDateTime",
@@ -40,13 +40,21 @@ class _AttendanceCheckInState extends State<AttendanceCheckIn> {
   var deviceInfo;
   bool hasAttended = false;
   String currentTime = "HH:mm:ss";
-  String checkInTime = "10:00:00";
 
   @override
   void initState() {
     super.initState();
-    lastAttendance();
     attendanceDetails();
+    lastAttendance();
+    serverTime();
+
+
+  }
+
+  @override
+  void dispose()
+  {
+    super.dispose();
   }
 
   Future<void> lastAttendance() async {
@@ -88,15 +96,21 @@ class _AttendanceCheckInState extends State<AttendanceCheckIn> {
     final DateFormat formatter = DateFormat('yyyy/MM/dd');
     final String englishFormatted = formatter.format(now);
     //attendDateTime:
-    currentTime = timeFormat.format(timeNow);
-    String isoAttendDateTime = now.toIso8601String();
+    final responseTime = await http.get(
+      Uri.parse('http://mis.godawarimun.gov.np/Api/Auth/GetServerTime'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    String currentTime = responseTime.body;
+    print(currentTime);
     //latitude, longitude and attitude:
     Position newPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     position = newPosition;
     //deviceId:
 
-    deviceInfo = sharedPreferences!.getString("userUUID")!;
+    deviceInfo = sharedPreferences!.getString("userUUID");
 
     //networkId:
     final info = NetworkInfo();
@@ -106,7 +120,7 @@ class _AttendanceCheckInState extends State<AttendanceCheckIn> {
     setState(() {
       attendanceModel.nepaliDate = nepaliFormatted.trim();
       attendanceModel.englishDate = englishFormatted.trim();
-      attendanceModel.attendDateTime = isoAttendDateTime.trim();
+      attendanceModel.attendDateTime = currentTime.trim();
       attendanceModel.latitude = position?.latitude.toString();
       attendanceModel.longitude = position?.longitude.toString();
       attendanceModel.deviceId = deviceInfo;
@@ -115,6 +129,18 @@ class _AttendanceCheckInState extends State<AttendanceCheckIn> {
       attendanceModel.status = "check-in";
       attendanceModel.mobileNo = phoneNumberController.text.trim();
     });
+  }
+  Future<void> serverTime() async{
+    final response = await http.get(
+      Uri.parse('http://mis.godawarimun.gov.np/Api/Auth/GetServerTime'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    setState(() {
+      attendanceModel.attendDateTime = currentTime.trim();
+    });
+
   }
 
   Future<void> checkTime() async {
@@ -130,12 +156,22 @@ class _AttendanceCheckInState extends State<AttendanceCheckIn> {
     if (response.statusCode == 200) {
       WorkCheckTime _workCheckTime =
           WorkCheckTime.fromJson(jsonDecode(response.body));
-      print(currentTime);
       String defaultDate = "0001-01-01 ";
-      String _currentTime = currentTime;
+      final responseTime = await http.get(
+        Uri.parse('http://mis.godawarimun.gov.np/Api/Auth/GetServerTime'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      String _currentTime = responseTime.body;
+      print(_currentTime);
       String allowedTime = _workCheckTime.upasthitHunaPauneSamaya;
-      DateTime dt1 = DateTime.parse(defaultDate + _currentTime);
+      print(allowedTime);
       DateTime dt2 = DateTime.parse(defaultDate + allowedTime);
+      print(dt2);
+      DateTime dt1 = DateTime.parse(defaultDate + _currentTime);
+      print(dt1);
+
       if ((dt1.compareTo(dt2) < 0)) {
         checkLocation();
       } else {
@@ -315,7 +351,7 @@ class _AttendanceCheckInState extends State<AttendanceCheckIn> {
                               style: TextStyle(fontSize: textSize))),
                       Expanded(
                           flex: 1,
-                          child: Text(currentTime,
+                          child: Text(attendanceModel.attendDateTime! +" (Server Time)",
                               style: TextStyle(fontSize: textSize))),
                     ],
                   ),
@@ -351,7 +387,7 @@ class _AttendanceCheckInState extends State<AttendanceCheckIn> {
                               style: TextStyle(fontSize: textSize))),
                       Expanded(
                           flex: 1,
-                          child: Text(attendanceModel.deviceId,
+                          child: Text(attendanceModel.deviceId.toString(),
                               style: TextStyle(fontSize: textSize))),
                     ],
                   ),
@@ -412,6 +448,8 @@ class _AttendanceCheckInState extends State<AttendanceCheckIn> {
                                         Navigator.pop(context);
                                         attendanceDetails();
                                         checkConnection();
+                                        // print(sharedPreferences!.getString("deviceId")!);
+                                        // print(sharedPreferences!.getString("userUUID"));
                                       },
                                       child: const Text("Conform"))
                                 ],

@@ -15,7 +15,7 @@ class PublicEvents extends StatefulWidget {
 }
 
 class _PublicEventsState extends State<PublicEvents> {
-  Future<List<PublicEventModel>> approvedLeave() async {
+  Future<List<PublicEventModel>> getPublicEvent() async {
     final response = await http.get(
       Uri.parse('http://mis.godawarimun.gov.np/Api/Event/GetPublicEvent'),
       headers: <String, String>{
@@ -65,7 +65,7 @@ class _PublicEventsState extends State<PublicEvents> {
         automaticallyImplyLeading: false,
       ),
       body: FutureBuilder<List<PublicEventModel>>(
-        future: approvedLeave(),
+        future: getPublicEvent(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
